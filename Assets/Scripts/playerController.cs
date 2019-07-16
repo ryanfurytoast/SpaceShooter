@@ -17,6 +17,9 @@ public class playerController : MonoBehaviour
     [SerializeField] float positionYawFactor = 3f;
     [SerializeField] float controlRollFactor = -20f;
 
+    bool isControlEnabled = true;
+
+  
 
     // Start is called before the first frame update
 
@@ -27,9 +30,13 @@ public class playerController : MonoBehaviour
 
     // Update is called once per frame
     void Update()
-    {
-        ProcessTranslation();
-        ProcessRotation();
+    {   
+        if (isControlEnabled)
+        {
+            ProcessTranslation();
+            ProcessRotation();
+        }
+
     }
 
     void ProcessTranslation()
@@ -55,8 +62,6 @@ public class playerController : MonoBehaviour
        transform.localPosition = new Vector3(clampedXPos, clampedYPos, transform.localPosition.z); //change only Z, not Y and X.
     }
 
-
-
     void ProcessRotation()
     {
         float pitchDueToPosition = transform.localPosition.y * positionPitchFactor;
@@ -64,9 +69,11 @@ public class playerController : MonoBehaviour
         float pitch = pitchDueToPosition + pitchDueToControlThrow;
         float yaw = transform.localPosition.x * positionYawFactor;
         float roll = xThrow * controlRollFactor;
-        print("pitch " + pitch);
-        print("yaw " + yaw);
-        print("roll " + roll);
         transform.localRotation = Quaternion.Euler(pitch, yaw, roll);
+    }
+
+    void OnPlayerDeath()
+    {
+        isControlEnabled = false;
     }
 }

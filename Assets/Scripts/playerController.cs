@@ -4,8 +4,9 @@ using UnityEngine;
 using UnityStandardAssets.CrossPlatformInput;
 
 public class playerController : MonoBehaviour
-{ 
-    float xThrow, yThrow;
+{
+    float xThrow;
+    float yThrow;
 
     [Tooltip("In ms ^ -1")] [SerializeField] float Speed= 10f;
     [Tooltip("In m")] [SerializeField] float xRange = 25f;
@@ -18,9 +19,10 @@ public class playerController : MonoBehaviour
 
 
     // Start is called before the first frame update
+
     void Start()
     {
-        
+
     }
 
     // Update is called once per frame
@@ -50,8 +52,10 @@ public class playerController : MonoBehaviour
         float clampedYPos = Mathf.Clamp(rawYPos, -yRange, yRange);
 
 
-        transform.localPosition = new Vector3(clampedXPos, clampedYPos, transform.localPosition.z); //change only Z, not Y and X.
+       transform.localPosition = new Vector3(clampedXPos, clampedYPos, transform.localPosition.z); //change only Z, not Y and X.
     }
+
+
 
     void ProcessRotation()
     {
@@ -60,6 +64,9 @@ public class playerController : MonoBehaviour
         float pitch = pitchDueToPosition + pitchDueToControlThrow;
         float yaw = transform.localPosition.x * positionYawFactor;
         float roll = xThrow * controlRollFactor;
+        print("pitch " + pitch);
+        print("yaw " + yaw);
+        print("roll " + roll);
         transform.localRotation = Quaternion.Euler(pitch, yaw, roll);
     }
 }

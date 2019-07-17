@@ -16,11 +16,10 @@ public class playerController : MonoBehaviour
     [SerializeField] float controlPitchFactor = -2f;
     [SerializeField] float positionYawFactor = 3f;
     [SerializeField] float controlRollFactor = -20f;
+    [SerializeField] ParticleSystem shootFX;
 
     bool isControlEnabled = true;
-
   
-
     // Start is called before the first frame update
 
     void Start()
@@ -30,11 +29,12 @@ public class playerController : MonoBehaviour
 
     // Update is called once per frame
     void Update()
-    {   
+    {
         if (isControlEnabled)
         {
             ProcessTranslation();
             ProcessRotation();
+            ProcessFiring();
         }
 
     }
@@ -72,8 +72,23 @@ public class playerController : MonoBehaviour
         transform.localRotation = Quaternion.Euler(pitch, yaw, roll);
     }
 
-    void OnPlayerDeath()
+    public void OnPlayerDeath()
     {
         isControlEnabled = false;
+    }
+
+    void ProcessFiring()
+    {
+        if (CrossPlatformInputManager.GetButton("Fire1"))
+        {
+            SetGunActive(true);
+        }
+        else { SetGunActive(false); }
+    }
+
+    void SetGunActive(bool onOffSwitch)
+    {
+        var emissionModule = shootFX.GetComponent<ParticleSystem>().emission;
+        emissionModule.enabled = onOffSwitch;
     }
 }
